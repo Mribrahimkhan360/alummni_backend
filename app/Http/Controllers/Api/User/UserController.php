@@ -9,65 +9,130 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // Get all users
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(User::all());
+        $query = User::with('roles');
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('student_id', 'like', "%{$search}%");
+            });
+        }
+
+        $sortField = $request->sort_field ?? 'created_at';
+        $sortDirection = $request->sort_direction ?? 'desc';
+        $query->orderBy($sortField, $sortDirection);
+
+        $perPage = $request->per_page ?? 10;
+        $users = $query->paginate($perPage);
+
+        return response()->json([
+            'success' => true,
+            'data' => $users->items(),
+            'meta' => [
+                'current_page' => $users->currentPage(),
+                'last_page' => $users->lastPage(),
+                'per_page' => $users->perPage(),
+                'total' => $users->total(),
+            ],
+        ]);
     }
 
-    // Create user
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
+            'student_id' => 'required|unique:users,student_id',
+            'passing_year' => 'required|integer|min:1950|max:' . (date('Y') + 10),
+            'department' => 'required|string|max:255',
+            'gender' => 'required|string|in:male,female,other',
+            'image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'password' => 'required|string|min:8',
         ]);
 
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        }
+
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'student_id' => $validated['student_id'],
+            'passing_year' => $validated['passing_year'],
+            'department' => $validated['department'],
+            'gender' => $validated['gender'],
+            'image' => $imagePath,
+            'password' => Hash::make($validated['password']),
         ]);
 
         return response()->json([
+            'success' => true,
             'message' => 'User created successfully',
-            'user' => $user
+            'data' => $user->load('roles'),
         ], 201);
     }
 
-    // Show single user
     public function show(User $user)
     {
-        return response()->json($user);
+        return response()->json([
+            'success' => true,
+            'data' => $user->load('roles.permissions'),
+        ]);
     }
 
-    // Update user
     public function update(Request $request, User $user)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
+            'student_id' => 'required|unique:users,student_id,' . $user->id,
+            'passing_year' => 'required|integer|min:1950|max:' . (date('Y') + 10),
+            'department' => 'required|string|max:255',
+            'gender' => 'required|string|in:male,female,other',
+            'image' => 'nullable|file|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'password' => 'nullable|string|min:8',
         ]);
 
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
+        $imagePath = $user->image;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public');
+        }
+
+        $updateData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'student_id' => $validated['student_id'],
+            'passing_year' => $validated['passing_year'],
+            'department' => $validated['department'],
+            'gender' => $validated['gender'],
+            'image' => $imagePath,
+        ];
+
+        if (!empty($validated['password'])) {
+            $updateData['password'] = Hash::make($validated['password']);
+        }
+
+        $user->update($updateData);
 
         return response()->json([
+            'success' => true,
             'message' => 'User updated successfully',
-            'user' => $user
+            'data' => $user->fresh()->load('roles'),
         ]);
     }
 
-    // Delete user
     public function destroy(User $user)
     {
         $user->delete();
 
         return response()->json([
-            'message' => 'User deleted successfully'
+            'success' => true,
+            'message' => 'User deleted successfully',
         ]);
     }
 }

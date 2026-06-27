@@ -8,13 +8,9 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Admin User
-        User::updateOrCreate(
+        $admin = User::updateOrCreate(
             ['email' => 'admin@example.com'],
             [
                 'name' => 'Admin',
@@ -25,9 +21,9 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
             ]
         );
+        $admin->assignRole('Super Admin');
 
-        // Student User
-        User::updateOrCreate(
+        $student = User::updateOrCreate(
             ['email' => 'student@example.com'],
             [
                 'name' => 'Student',
@@ -38,7 +34,21 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
             ]
         );
+        $student->assignRole('Student');
 
-        $this->command->info('Admin and Student users created successfully.');
+        $alumni = User::updateOrCreate(
+            ['email' => 'alumni@example.com'],
+            [
+                'name' => 'Alumni User',
+                'student_id' => 'ALU001',
+                'passing_year' => 2018,
+                'department' => 'Electrical Engineering',
+                'gender' => 'female',
+                'password' => Hash::make('password'),
+            ]
+        );
+        $alumni->assignRole('Alumni');
+
+        $this->command->info('Users created with roles successfully.');
     }
 }
