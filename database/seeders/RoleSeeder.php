@@ -26,6 +26,8 @@ class RoleSeeder extends Seeder
             'alumni-list', 'alumni-create', 'alumni-edit', 'alumni-delete',
             'event-list', 'event-create', 'event-edit', 'event-delete',
             'job-list', 'job-create', 'job-edit', 'job-delete',
+            'payment-list', 'payment-create', 'payment-edit', 'payment-delete',
+            'payment-approve',
         ]);
 
         $alumni->givePermissionTo([
@@ -33,12 +35,14 @@ class RoleSeeder extends Seeder
             'alumni-list',
             'event-list', 'event-create',
             'job-list', 'job-create',
+            'payment-list', 'payment-create',
         ]);
 
         $student->givePermissionTo([
             'alumni-list',
             'event-list',
             'job-list',
+            'payment-list',
         ]);
 
         $this->command->info('Roles and permissions assigned successfully.');

@@ -20,16 +20,16 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-protected $fillable = [
-    'name',
-    'email',
-    'student_id',
-    'passing_year',
-    'department',
-    'gender',
-    'password',
-    'image',
-];
+    protected $fillable = [
+        'name',
+        'email',
+        'student_id',
+        'passing_year',
+        'department',
+        'gender',
+        'password',
+        'image',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -52,5 +52,9 @@ protected $fillable = [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function payments() 
+    {
+        return $this->hasMany(Payment::class);       
     }
 }

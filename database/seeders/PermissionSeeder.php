@@ -34,6 +34,11 @@ class PermissionSeeder extends Seeder
             'job-create',
             'job-edit',
             'job-delete',
+            'payment-list',
+            'payment-create',
+            'payment-edit',
+            'payment-delete',
+            'payment-approve',
         ];
 
         foreach ($permissions as $permission) {

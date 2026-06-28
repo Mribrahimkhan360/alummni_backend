@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Payment;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -68,6 +70,21 @@ class AuthController extends Controller
         $user->tokens()->delete();
 
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Payment::where('user_id', $user->id)
+        // ->where('status', 'approved')
+        // ->whereDate('payment_date', '<=', Carbon::now()->subYear())
+        // ->update([
+        //     'status' => 'expired'
+        // ]);
+
+
+        Payment::where('user_id', $user->id)
+            ->where('status','approved')
+            ->whereDate('payment_date', '<=', Carbon::now()->subYear())
+            ->update([
+                'status' => 'expired'
+            ]);
 
         return response()->json([
             'message' => 'Login successful',

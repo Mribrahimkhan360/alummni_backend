@@ -42,4 +42,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/permissions/{permission}', [PermissionController::class, 'show'])->middleware('permission:permission-list');
     Route::put('/permissions/{permission}', [PermissionController::class, 'update'])->middleware('permission:permission-edit');
     Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->middleware('permission:permission-delete');
+    
+    Route::apiResource('payments', \App\Http\Controllers\Payment\PaymentController::class);
+
+    Route::patch('payments/{payment}/approve', [\App\Http\Controllers\Payment\PaymentController::class, 'approve']);
+    Route::patch('payments/{payment}/reject', [\App\Http\Controllers\Payment\PaymentController::class, 'reject']);
 });
