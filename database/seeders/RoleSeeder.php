@@ -12,10 +12,10 @@ class RoleSeeder extends Seeder
     {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $superAdmin = Role::create(['name' => 'Super Admin', 'guard_name' => 'sanctum']);
-        $admin = Role::create(['name' => 'Admin', 'guard_name' => 'sanctum']);
-        $alumni = Role::create(['name' => 'Alumni', 'guard_name' => 'sanctum']);
-        $student = Role::create(['name' => 'Student', 'guard_name' => 'sanctum']);
+        $superAdmin = Role::firstOrCreate(['name' => 'Super Admin', 'guard_name' => 'sanctum']);
+        $admin = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'sanctum']);
+        $alumni = Role::firstOrCreate(['name' => 'Alumni', 'guard_name' => 'sanctum']);
+        $student = Role::firstOrCreate(['name' => 'Student', 'guard_name' => 'sanctum']);
 
         $superAdmin->givePermissionTo(Permission::all());
 
@@ -28,6 +28,7 @@ class RoleSeeder extends Seeder
             'job-list', 'job-create', 'job-edit', 'job-delete',
             'payment-list', 'payment-create', 'payment-edit', 'payment-delete',
             'payment-approve',
+            'notice-list', 'notice-create', 'notice-edit', 'notice-delete',
         ]);
 
         $alumni->givePermissionTo([

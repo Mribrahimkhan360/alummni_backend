@@ -162,4 +162,18 @@ class PaymentController extends Controller
             'data' => $payment
         ]);
     }
+
+    public function latestPayment()
+{
+    $payment = Payment::where('user_id', auth()->id())
+        ->latest()
+        ->first();
+
+    return response()->json([
+        'success' => true,
+        'data' => $payment
+    ]);
+}
+
+
 }

@@ -39,10 +39,14 @@ class PermissionSeeder extends Seeder
             'payment-edit',
             'payment-delete',
             'payment-approve',
+            'notice-list',
+            'notice-create',
+            'notice-edit',
+            'notice-delete',
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission, 'guard_name' => 'sanctum']);
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'sanctum']);
         }
 
         $this->command->info('Permissions seeded successfully.');

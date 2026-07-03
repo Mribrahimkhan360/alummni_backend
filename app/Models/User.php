@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -29,6 +31,7 @@ class User extends Authenticatable
         'gender',
         'password',
         'image',
+        'bio',
     ];
 
     /**
@@ -53,8 +56,33 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function payments() 
+    public function payments()
     {
-        return $this->hasMany(Payment::class);       
+        return $this->hasMany(Payment::class);
     }
+
+    public function jobProfile() {
+        return $this->hasOne(JobProfile::class);
+    }
+
+    public function educations(): HasMany
+    {
+        return $this->hasMany(Education::class);
+    }
+    
+    public function experiences()
+    {
+        return $this->hasMany(Experience::class);
+    }
+
+    public function achievements(): HasMany
+    {
+        return $this->hasMany(Achivement::class);
+    }
+
+    public function connect(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Connect::class);
+    }
+
 }

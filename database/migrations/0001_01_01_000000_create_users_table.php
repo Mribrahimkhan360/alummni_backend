@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('department');
             $table->string('gender');
             $table->string('image')->nullable();
+            $table->string('organization')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
