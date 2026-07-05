@@ -29,13 +29,11 @@ class RoleSeeder extends Seeder
             'payment-list', 'payment-create', 'payment-edit', 'payment-delete',
             'payment-approve',
             'notice-list', 'notice-create', 'notice-edit', 'notice-delete',
+            'dashboard',
         ]);
 
         $alumni->givePermissionTo([
-            'user-list',
             'alumni-list',
-            'event-list', 'event-create',
-            'job-list', 'job-create',
             'payment-list', 'payment-create',
         ]);
 

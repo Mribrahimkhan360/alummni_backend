@@ -11,7 +11,10 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::with('roles');
+        $query = User::with('roles')
+            ->whereDoesntHave('roles', function ($q) {
+                $q->where('name', 'Super Admin');
+            });
 
         if ($request->has('search')) {
             $search = $request->search;
@@ -60,8 +63,8 @@ class UserController extends Controller
         }
 
         $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
+            'name'          => $validated['name'],
+            'email'         => $validated['email'],
             'student_id' => $validated['student_id'],
             'passing_year' => $validated['passing_year'],
             'department' => $validated['department'],
@@ -79,6 +82,13 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        if ($user->hasRole('Super Admin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found',
+            ], 404);
+        }
+
         return response()->json([
             'success' => true,
             'data' => $user->load('roles.permissions'),
@@ -87,6 +97,13 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
+        if ($user->hasRole('Super Admin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found',
+            ], 404);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
@@ -128,6 +145,13 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        if ($user->hasRole('Super Admin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found',
+            ], 404);
+        }
+
         $user->delete();
 
         return response()->json([

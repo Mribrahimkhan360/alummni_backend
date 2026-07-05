@@ -18,6 +18,7 @@ class Event extends Model
         'is_active',
         'event_date',
         'event_time',
+        'countdown_end',
     ];
 
     protected $casts = [

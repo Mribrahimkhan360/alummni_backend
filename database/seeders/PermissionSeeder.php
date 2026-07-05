@@ -43,6 +43,20 @@ class PermissionSeeder extends Seeder
             'notice-create',
             'notice-edit',
             'notice-delete',
+            'about-create',
+            'about-edit',
+            'about-delete',
+            'blog-list',
+            'blog-create',
+            'blog-edit',
+            'blog-delete',
+            'dashboard',
+            'gallery-category-create',
+            'gallery-category-edit',
+            'gallery-category-delete',
+            'gallery-upload-create',
+            'gallery-upload-edit',
+            'gallery-upload-delete',
         ];
 
         foreach ($permissions as $permission) {

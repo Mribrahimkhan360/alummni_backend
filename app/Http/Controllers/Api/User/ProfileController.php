@@ -230,6 +230,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $contact = $user->connect()->first();
+        
         if ($contact) {
             $contact->update($request->validated());
         } else {

@@ -17,6 +17,7 @@ class EventSeeder extends Seeder
                 'image'         => '/event/event-img-1.jpg',
                 'event_date'    => '2026-08-15',
                 'event_time'    => '10:00 AM – 6:00 PM',
+                'countdown_end' => '2026-08-15 23:59:59',
                 'is_active'     => true,
             ],
             [
@@ -26,6 +27,7 @@ class EventSeeder extends Seeder
                 'image'         => '/event/event-img-2.jpg',
                 'event_date'    => '2026-09-10',
                 'event_time'    => '9:00 AM – 4:00 PM',
+                'countdown_end' => '2026-09-10 23:59:59',
                 'is_active'     => true,
             ],
             [
@@ -35,6 +37,7 @@ class EventSeeder extends Seeder
                 'image'         => '/event/event-img-3.jpg',
                 'event_date'    => '2026-07-25',
                 'event_time'    => '3:00 PM – 4:30 PM',
+                'countdown_end' => '2026-07-25 23:59:59',
                 'is_active'     => true,
             ],
             [
@@ -44,6 +47,7 @@ class EventSeeder extends Seeder
                 'image'         => '/event/event-img-4.jpg',
                 'event_date'    => '2026-12-12',
                 'event_time'    => '7:00 PM – 11:00 PM',
+                'countdown_end' => '2026-12-12 23:59:59',
                 'is_active'     => true,
             ],
         ];

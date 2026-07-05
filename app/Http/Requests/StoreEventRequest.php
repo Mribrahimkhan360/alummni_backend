@@ -32,6 +32,7 @@ class StoreEventRequest extends FormRequest
             'image'                 => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'event_date'            => 'nullable|date',
             'event_time'            => 'nullable|string|max:20',
+            'countdown_end'         => 'nullable|date',
         ];
     }
 

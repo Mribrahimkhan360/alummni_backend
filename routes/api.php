@@ -12,8 +12,15 @@ use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Api\AboutController;
 use App\Http\Controllers\TestimonialController;
+use App\Http\Controllers\GalleryCategoryController;
+use App\Http\Controllers\GalleryController;
 
 
+
+
+// Reset password routes
+Route::post('/password/email', [AuthController::class, 'sendResetLinkEmail']);
+Route::post('/password/reset', [AuthController::class, 'resetPassword']);
 
 Route::get('/events/latest', [EventController::class, 'latest']);
 Route::get('/events', [EventController::class, 'index']);
@@ -38,6 +45,13 @@ Route::get('/about/show/{about}', [AboutController::class, 'show']);
 
 Route::get('/testimonials', [TestimonialController::class, 'index']);
 Route::get('/testimonials/{id}', [TestimonialController::class, 'show']);
+
+// public gallery routes
+Route::get('/gallery-categories', [GalleryCategoryController::class, 'index']);
+Route::get('/gallery-categories/{galleryCategory}', [GalleryCategoryController::class, 'show']);
+Route::get('/galleries', [GalleryController::class, 'index']);
+Route::get('/galleries/{gallery}', [GalleryController::class, 'show']);
+Route::get('/galleries/by-category/{categoryId}', [GalleryController::class, 'byCategory']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -122,7 +136,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // about routes
     Route::post('/about/store', [AboutController::class, 'store']);
-    Route::post('/about/update/{about}', [AboutController::class, 'update']);
+    Route::put('/about/update/{about}', [AboutController::class, 'update']);
     Route::delete('/about/delete/{about}', [AboutController::class, 'destroy']);
 
     // testimonial routes
@@ -130,5 +144,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/testimonials/update/{testimonials}', [TestimonialController::class, 'update']);
     Route::delete('/testimonials/delete/{testimonials}', [TestimonialController::class, 'destroy']);
 
-    // 
+    // gallery-category routes
+    Route::post('/gallery-categories', [GalleryCategoryController::class, 'store']);
+    Route::put('/gallery-categories/{galleryCategory}', [GalleryCategoryController::class, 'update']);
+    Route::delete('/gallery-categories/{galleryCategory}', [GalleryCategoryController::class, 'destroy']);
+
+    // gallery routes
+    Route::post('/galleries', [GalleryController::class, 'store']);
+    Route::post('/galleries/{gallery}', [GalleryController::class, 'update']);
+    Route::delete('/galleries/{gallery}', [GalleryController::class, 'destroy']);
 });

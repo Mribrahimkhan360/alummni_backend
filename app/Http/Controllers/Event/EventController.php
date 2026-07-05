@@ -43,6 +43,7 @@ class EventController extends Controller
             'image'         => $imagePath,
             'event_date'    => $data['event_date'] ?? null,
             'event_time'    => $data['event_time'] ?? null,
+            'countdown_end' => $data['countdown_end'] ?? null,
         ]);
 
         return response()->json([
@@ -114,6 +115,7 @@ class EventController extends Controller
             'is_active'     => 'nullable|boolean',
             'event_date'    => 'nullable|date',
             'event_time'    => 'nullable|string|max:20',
+            'countdown_end' => 'nullable|date',
         ]);
 
         if ($request->hasFile('image')) {

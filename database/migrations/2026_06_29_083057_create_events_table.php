@@ -20,6 +20,12 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('dietary_info')->nullable();
             $table->string('ticket_prices')->nullable();
+            
+            // Event Date & Time (For Countdown)
+            $table->date('event_date');
+            $table->time('event_time')->nullable();
+            $table->dateTime('countdown_end');
+
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

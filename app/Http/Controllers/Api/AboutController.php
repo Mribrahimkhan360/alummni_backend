@@ -16,6 +16,10 @@ class AboutController extends Controller
 
     public function store(AboutRequest $request)
     {
+        if (About::exists()) {
+            return response()->json(['message' => 'Only one about section is allowed'], 409);
+        }
+
         $data = $request->validated();
 
         if ($request->hasFile('image_secondary')) {

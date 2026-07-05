@@ -10,7 +10,11 @@ class AlumniController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::role('Alumni')->with([
+        $query = User::role('Alumni')
+            ->whereDoesntHave('roles', function ($q) {
+                $q->where('name', 'Super Admin');
+            })
+            ->with([
             'jobProfile',
             'educations',
             'experiences',
@@ -52,7 +56,11 @@ class AlumniController extends Controller
 
     public function stats()
     {
-        $users = User::role('Alumni')->with('jobProfile', 'connect')->get();
+        $users = User::role('Alumni')
+            ->whereDoesntHave('roles', function ($q) {
+                $q->where('name', 'Super Admin');
+            })
+            ->with('jobProfile', 'connect')->get();
 
         $companies = collect($users->filter(fn ($u) => $u->jobProfile && $u->jobProfile->company_name))
             ->pluck('jobProfile.company_name')
@@ -70,7 +78,11 @@ class AlumniController extends Controller
 
     public function show($id)
     {
-        $user = User::role('Alumni')->with([
+        $user = User::role('Alumni')
+            ->whereDoesntHave('roles', function ($q) {
+                $q->where('name', 'Super Admin');
+            })
+            ->with([
             'jobProfile',
             'educations',
             'experiences',
@@ -144,6 +156,9 @@ class AlumniController extends Controller
                 'linkedin' => '',
                 'twitter' => '',
                 'email' => $connect->email ?? $user->email,
+                'phone' => $connect->phone ?? '',
+                'instagram' => $connect->instagram ?? '',
+                'facebook' => $connect->facebook ?? '',
             ],
         ];
     }
